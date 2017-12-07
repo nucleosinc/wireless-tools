@@ -32,9 +32,36 @@ var child_process = require('child_process');
  */
 var hostapd = module.exports = {
   exec: child_process.exec,
+  enabled: enabled,
   disable: disable,
   enable: enable
 };
+
+/**
+ * The **hostapd enabled** command checks whether a hostapd is running for this
+ * service.
+ *
+ * @static
+ * @category hostapd
+ * @param {string} interface The network interface of the access point.
+ * @param {function} callback The callback function.
+ * @returns {process} The child process.
+ * @example
+ *
+ * var hostapd = require('wireless-tools/hostapd');
+ *
+ * hostapd.enabled('wlan0', function(enabled) {
+ *   // enabled contains a bool signifying whether hostapd is running
+ * });
+ *
+ */
+function enabled(interface, callback) {
+  var file = interface + '-hostapd.conf';
+
+  return this.exec('pgrep -f "^hostapd -B ' + file + '"', function(error) {
+    callback(!error)
+  })
+}
 
 /**
  * The **hostpad disable** command is used to stop hosting an access point

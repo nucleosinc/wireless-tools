@@ -33,9 +33,35 @@ var child_process = require('child_process');
  */
 var udhcpc = module.exports = {
   exec: child_process.exec,
+  enabled: enabled,
   disable: disable,
   enable: enable
 };
+
+/**
+ * The **hostpad enabled** command checks whether a hostapd is running for this
+ * service.
+ *
+ * @static
+ * @category udhcpc
+ * @param {string} interface The network interface.
+ * @param {function} callback The callback function.
+ * @returns {process} The child process.
+ * @example
+ *
+ * var udhcpc = require('wireless-tools/udhcpc');
+ *
+ * udhcpc.disable('wlan0', function(err) {
+ *   // enabled contains a bool signifying whether udhcpc is running
+ * });
+ *
+ */
+function enabled(interface, callback) {
+  return this.exec('pgrep -f pgrep -f "^udhcpc -i ' + interface + '"', function(error) {
+    callback(!error)
+  })
+}
+
 
 /**
  * The **udhcpc disable** command is used to stop a dhcp client on a
