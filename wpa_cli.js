@@ -78,7 +78,7 @@ function parse_status_block(block) {
     }
 
     if ((match = block.match(/[^b]ssid=([^\n]+)/))) {
-        parsed.ssid = match[1];
+        parsed.ssid = Buffer.from(match[1], 'ascii').toString('utf8');
     }
 
     if ((match = block.match(/[^b]pairwise_cipher=([^\n]+)/))) {
@@ -208,12 +208,12 @@ function parse_scan_results(block) {
             parsed.signalLevel = parseInt(match[1], 10);
         }
 
-        if ((match = entry.match(/\t(\[.+\])\t/))) {
+        if ((match = entry.match(/\t(\[.+\])\t?/))) {
             parsed.flags = match[1];
         }
 
         if ((match = entry.match(/\t([^\t]{1,32}(?=\n))/))) {
-            parsed.ssid = match[1];
+            parsed.ssid = Buffer.from(match[1], 'ascii').toString('utf8');
         }
 
         if(!(Object.keys(parsed).length === 0 && parsed.constructor === Object)){
@@ -238,7 +238,7 @@ function parse_scan_results_interface(callback) {
         if (error) {
             callback(error);
         } else {
-            callback(error, parse_scan_results(stdout.trim()));
+            callback(error, parse_scan_results(stdout));
         }
     };
 }

@@ -239,11 +239,13 @@ function down(interface, callback) {
  *   // the interface is up 
  * });
  *
+ * ipv4_address, ipv4_broadcast and ipv4_subnet_mask are optional
  */
 function up(options, callback) {
-  return this.exec('ifconfig ' + options.interface +
-    ' ' + options.ipv4_address +
-    ' netmask ' + options.ipv4_subnet_mask +
-    ' broadcast ' + options.ipv4_broadcast +
+   return this.exec('ifconfig ' + options.interface +
+    ' ' +
+    (options.ipv4_address ? options.ipv4_address : '0.0.0.0') +
+    (options.ipv4_subnet_mask ? ' netmask ' + options.ipv4_subnet_mask : '') +
+    (options.ipv4_broadcast ? ' broadcast ' + options.ipv4_broadcast : '') +
     ' up', callback);
 }
