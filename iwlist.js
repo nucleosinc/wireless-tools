@@ -342,7 +342,9 @@ function freq(interface, callback) {
       return
     }
 
-    callback(null, stdout.split('\n').slice(1).map(function(line) {
+    callback(null, stdout.split('\n').slice(1).filter(function(line) {
+      return line.trim().length > 0
+    }).map(function(line) {
       var parts = line.trim().split(' ')
 
       return {

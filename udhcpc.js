@@ -39,7 +39,7 @@ var udhcpc = module.exports = {
 };
 
 /**
- * The **hostpad enabled** command checks whether a hostapd is running for this
+ * The **udhcpc enabled** command checks whether a udhcpc is running for this
  * service.
  *
  * @static
@@ -51,7 +51,7 @@ var udhcpc = module.exports = {
  *
  * var udhcpc = require('wireless-tools/udhcpc');
  *
- * udhcpc.disable('wlan0', function(err) {
+ * udhcpc.enabled('wlan0', function(err, enabled) {
  *   // enabled contains a bool signifying whether udhcpc is running
  * });
  *
@@ -61,7 +61,6 @@ function enabled(interface, callback) {
     callback(null, !error)
   })
 }
-
 
 /**
  * The **udhcpc disable** command is used to stop a dhcp client on a

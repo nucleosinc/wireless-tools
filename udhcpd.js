@@ -33,9 +33,35 @@ var child_process = require('child_process');
  */
 var udhcpd = module.exports = {
   exec: child_process.exec,
+  enabled: enabled,
   disable: disable,
   enable: enable
 };
+
+/**
+ * The **udhcpd enabled** command checks whether a udhcpd is running for this
+ * service.
+ *
+ * @static
+ * @category udhcpc
+ * @param {string} interface The network interface.
+ * @param {function} callback The callback function.
+ * @returns {process} The child process.
+ * @example
+ *
+ * var udhcpd = require('wireless-tools/udhcpd');
+ *
+ * udhcpd.enabled('wlan0', function(err, enabled) {
+ *   // enabled contains a bool signifying whether udhcpc is running
+ * });
+ *
+ */
+function enabled(interface, callback) {
+  var file = interface + '-udhcpd.conf';
+  return this.exec('pgrep -f "^udhcpd ' +file + '"', function(error) {
+    callback(null, !error)
+  })
+}
 
 /**
  * Recursively expand `options` into `lines` with a `prefix`.
