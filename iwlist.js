@@ -33,7 +33,8 @@ var child_process = require('child_process');
  */
 var iwlist = module.exports = {
   exec: child_process.exec,
-  scan: scan
+  scan: scan,
+  freq: freq
 };
 
 /**
@@ -307,4 +308,47 @@ function scan(options, callback) {
   }
 
   this.exec('iwlist ' + interface + ' scan' + extra_params, parse_scan(show_hidden, callback));
+}
+
+/**
+ * The **iwlist freq** command is used to list frequencies supported by
+ * a wireless card.
+ *
+ * @static
+ * @param {string} interface The wireless network interface.
+ * @param {function} callback The callback function.
+ * @example
+ *
+ * var iwlist = require('wireless-tools/iwlist');
+ *
+ * iwlist.freq('wlan0', function(err, frequencies) {
+ *   console.log(frequencies);
+ * });
+ *
+ * // =>
+ * [
+ *   {
+ *     number: 1,
+ *     frequency: 2.412
+ *   },
+ *   ...
+ * ]
+ *
+ */
+function freq(interface, callback) {
+  this.exec('iwlist ' + interface + ' freq', function(error, stdout, stderr) {
+    if (error) {
+      callback(error);
+      return
+    }
+
+    callback(null, stdout.split('\n').slice(1).map(function(line) {
+      var parts = line.trim().split(' ')
+
+      return {
+        channel: parseInt(parts[1]),
+        frequency: parseFloat(parts[3])
+      }
+    }))
+  });
 }

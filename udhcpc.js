@@ -57,8 +57,8 @@ var udhcpc = module.exports = {
  *
  */
 function enabled(interface, callback) {
-  return this.exec('pgrep -f pgrep -f "^udhcpc -i ' + interface + '"', function(error) {
-    callback(!error)
+  return this.exec('pgrep -f "^udhcpc -i ' + interface + '"', function(error) {
+    callback(null, !error)
   })
 }
 

@@ -59,7 +59,7 @@ function enabled(interface, callback) {
   var file = interface + '-hostapd.conf';
 
   return this.exec('pgrep -f "^hostapd -B ' + file + '"', function(error) {
-    callback(!error)
+    callback(null, !error)
   })
 }
 
