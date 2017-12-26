@@ -58,7 +58,7 @@ var udhcpd = module.exports = {
  */
 function enabled(interface, callback) {
   var file = interface + '-udhcpd.conf';
-  return this.exec('pgrep -f "^udhcpd ' +file + '"', function(error) {
+  return this.exec('pgrep -f "^udhcpd -S ' +file + '"', function(error) {
     callback(null, !error)
   })
 }
@@ -142,7 +142,7 @@ function enable(options, callback) {
   var file = options.interface + '-udhcpd.conf';
 
   var commands = [].concat(
-    'cat <<EOF >' + file + ' && udhcpd ' + file + ' && rm -f ' + file,
+    'cat <<EOF >' + file + ' && udhcpd -S ' + file + ' && rm -f ' + file,
     expand(options));
 
   return this.exec(commands.join('\n'), callback);
@@ -168,5 +168,5 @@ function enable(options, callback) {
  */
 function disable(interface, callback) {
   var file = interface + '-udhcpd.conf';
-  return this.exec('kill `pgrep -f "^udhcpd ' + file + '"` || true', callback);
+  return this.exec('kill `pgrep -f "^udhcpd -S ' + file + '"` || true', callback);
 }

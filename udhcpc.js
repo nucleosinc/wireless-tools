@@ -57,7 +57,7 @@ var udhcpc = module.exports = {
  *
  */
 function enabled(interface, callback) {
-  return this.exec('pgrep -f "^udhcpc -i ' + interface + '"', function(error) {
+  return this.exec('pgrep -f "^udhcpc -S -i ' + interface + '"', function(error) {
     callback(null, !error)
   })
 }
@@ -81,7 +81,7 @@ function enabled(interface, callback) {
  *
  */
 function disable(interface, callback) {
-  var command = 'kill `pgrep -f "^udhcpc -i ' + interface + '"` || true';
+  var command = 'kill `pgrep -f "^udhcpc -S -i ' + interface + '"` || true';
   return this.exec(command, callback);
 }
 
@@ -108,6 +108,6 @@ function disable(interface, callback) {
  *
  */
 function enable(options, callback) {
-  var command = 'udhcpc -i ' + options.interface + ' -n';
+  var command = 'udhcpc -S -i ' + options.interface + ' -n';
   return this.exec(command, callback);  
 }
